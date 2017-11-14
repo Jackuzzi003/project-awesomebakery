@@ -31,4 +31,13 @@ public class Date {
 		return "<" + day + "." + hour + ">";
 	}
 
+	public Date parseStringToDate (String stringDate){
+		String[] tmp = stringDate.split(".");
+
+		int days = Integer.parseInt(tmp[1]);
+		int hours = Integer.parseInt(tmp[2]);
+
+		return new Date(days, hours);
+	}
+
 }

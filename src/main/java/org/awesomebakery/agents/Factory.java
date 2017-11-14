@@ -10,13 +10,14 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.awesomebakery.model.Location;
+import org.awesomebakery.model.Order;
 
 import java.util.List;
 import java.util.Vector;
 
 public class Factory extends Agent {
 
-	/*private Location location;
+	private Location location;
 	private int numberDoughKneadingMachines;
 	private int numberOvens;
 	private int ovenHeatingTimeFactor;
@@ -69,9 +70,10 @@ public class Factory extends Agent {
 
 	public void setOvenCoolingTimeFactor(int ovenCoolingTimeFactor) {
 		this.ovenCoolingTimeFactor = ovenCoolingTimeFactor;
-	}*/
+	}
 
 	private List<String> orders = new Vector<>();
+	private List<Order> orderObjectList = new Vector<>();
 
 	protected void setup() {
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -102,7 +104,9 @@ public class Factory extends Agent {
 				orders.add(name);
 				reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 				myAgent.send(reply);
-				System.out.println("I got this Order "+orders);
+				System.out.println(orders);
+				Order newOrderObj = new Order().parseStringToOrderObject(orders);
+				orderObjectList.add(newOrderObj);
 			} else {
 				block();
 			}

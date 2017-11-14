@@ -18,6 +18,8 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import org.awesomebakery.model.Date;
+import org.awesomebakery.model.Order;
 
 public class Customer extends Agent {
 
@@ -27,6 +29,7 @@ public class Customer extends Agent {
     private static final String typeFactory = "Factory";
     private static final String seperator = ",";
     private static final String filepath = "./test.csv";
+
 
     private List schedulOrder(String seperator, String filepath) throws FileNotFoundException {
         ArrayList<String> scheduleList = new ArrayList<String>();
@@ -90,6 +93,15 @@ public class Customer extends Agent {
 
     private MessageTemplate mt = null;
 
+    private String createNewOrder(String customerID, Date today, List<String> scheduleList, int[] numberToBeDelivered){
+        String[] date = scheduleList.get(0).split(".");
+        String dateDay = date[0];
+        String dateHour = date[1];
+        Date deliveryDate = new Date(Integer.parseInt(dateDay),Integer.parseInt(dateHour));
+        Order newOrder = new Order(customerID, today, deliveryDate, numberToBeDelivered);
+        return newOrder.toString();
+    }
+
     private class PlaceOrderBehaviour extends OneShotBehaviour {
         private static final long serialVersionUID = 1L;
 
@@ -98,7 +110,8 @@ public class Customer extends Agent {
             ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
             cfp.addReceiver(factories.get(0));
             try {
-                cfp.setContent(String.valueOf(schedulOrder(seperator, filepath)));
+                //Just a test, to see if the helper class are functioning
+                cfp.setContent(createNewOrder("testCustomer", new Date(001,01), schedulOrder(seperator,filepath), new int[]{100, 120}));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
